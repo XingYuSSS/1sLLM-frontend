@@ -7,10 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2024-07-22
+
 ### Added
 
 - Add all files of this project
 - Add README and CHANGELOG
 - Add LICENSE
 
-[unreleased]: https://github.com/XingYuSSS/1sLLM-frontend/tree/main
+[unreleased]: https://github.com/XingYuSSS/1sLLM-frontend/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/XingYuSSS/1sLLM-frontend/tree/v0.1.0
