@@ -7,9 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add streaming generate in `api` 
+- Add streaming generate in `message controller` with simple animate
+- Add useStream field in `local`
+
 ### Changed 
 
 - Move all init statement in `main` to `init` file
+- Move the order of fields in `local`
 - Update README
 
 ## [0.1.0] - 2024-07-22

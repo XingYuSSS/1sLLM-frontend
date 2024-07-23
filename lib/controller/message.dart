@@ -13,6 +13,7 @@ class MessageController extends GetxController {
   final displayNum = 1.obs;
 
   final ApiService api = Get.find();
+  final LocalService local = Get.find();
 
   void loadAllMessages(String conversationId) async {
     if (conversationId == '')return;
@@ -40,17 +41,41 @@ class MessageController extends GetxController {
     selecting.value = true;
     sending.value = true;
     final messages = await api.getMessages(conversationId);
-    final sendedMessage = Message(conversationId: conversationId, text: text, role: Get.find<LocalService>().userName);
+    final sendedMessage = Message(conversationId: conversationId, text: text, role: local.userName);
     messageList.value = [...messages['msgList']!, sendedMessage];
 
-    EasyLoading.show(status: 'generatingResponse'.tr, dismissOnTap: true);
-    final newMessages = await api.sendMessage(conversationId, text, selectProviderModels);
-    EasyLoading.dismiss();
-    if(newMessages.length == 1) {
-      messageList.add(newMessages[0]);
-      selecting.value = false;
+    if(local.useStream) {
+      final stream = api.sendMessageStream(conversationId, text, selectProviderModels);
+
+      final first = await stream.first;
+      if(first.length == 1){
+        messageList.add(first[0]);
+        selecting.value = false;
+      } else {
+        selectingMessageList.value = first;
+      }
+
+      List<Message> last = first;
+      await for (var newMessages in stream) {
+        last = newMessages;
+        final msg = newMessages.map((e) {e.text+='_'; return e;}).toList();
+        msg.length == 1
+          ? messageList[-1] = msg[0]
+          : selectingMessageList.value = msg;
+      }
+      last.length == 1
+        ? messageList[-1] = last[0]
+        : selectingMessageList.value = last;
     } else {
-      selectingMessageList.value = newMessages;
+      EasyLoading.show(status: 'generatingResponse'.tr, dismissOnTap: true);
+      final newMessages = await api.sendMessage(conversationId, text, selectProviderModels);
+      EasyLoading.dismiss();
+      if(newMessages.length == 1) {
+        messageList.add(newMessages[0]);
+        selecting.value = false;
+      } else {
+        selectingMessageList.value = newMessages;
+      }
     }
     sending.value = false;
     return true;

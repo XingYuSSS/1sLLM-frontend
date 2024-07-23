@@ -6,18 +6,19 @@ class LocalService extends GetxService {
   final GetStorage _box = GetStorage();
 
   String _userName = '';
+  late Locale _local;
+  late ThemeMode _theme;
+  late bool _useStream;
+
   String get userName {
     return _userName;
   }
-
+  bool get isLogin => _userName != '';
   set userName(String value) {
     _userName = value;
     _box.write('userName', value);
   }
 
-  bool get isLogin => _userName != '';
-
-  late Locale _local;
   Locale get local => _local;
   set local(Locale local) {
     Get.updateLocale(local);
@@ -25,12 +26,18 @@ class LocalService extends GetxService {
     _box.write('locale', local.languageCode);
   }
 
-  late ThemeMode _theme;
   ThemeMode get theme => _theme;
   set theme(ThemeMode theme) {
     _theme = theme;
     _box.write('theme', theme.toString().split('.')[1]);
   }
+
+  bool get useStream => _useStream;
+  set useStream(bool useStream) {
+    _useStream = useStream;
+    _box.write('useStream', useStream);
+  }
+
 
   @override
   void onInit() async {
@@ -38,6 +45,7 @@ class LocalService extends GetxService {
     initLocal();
     initUser();
     initTheme();
+    initUseStream();
   }
 
   initLocal() async {
@@ -68,5 +76,9 @@ class LocalService extends GetxService {
       themeMode = ThemeMode.system;
     }
     theme = themeMode;
+  }
+
+  initUseStream() async {
+    _useStream = _box.read('useStream') ?? false;
   }
 }

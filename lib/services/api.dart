@@ -273,6 +273,37 @@ class ApiService extends GetxService {
     return messageList;
   }
 
+  Stream<List<Message>> sendMessageStream(
+    String conversationId,
+    String text,
+    Map<String, List<String>> providerModels,
+  ) async* {
+    final response = await _get(
+      '/chat/gen/stream',
+      queryParameters: {
+        'cid': conversationId,
+        'p': text,
+        'provider_models': providerModels
+      },
+      options: Options(responseType: ResponseType.stream),
+      decodeAsJson: false
+    );
+    final Stream responseStream = response.stream;
+
+    final models = providerModels.values.expand((element) => element);    
+    Map<String, Message> messageMap = {
+      for (String model in models)
+      model: Message(conversationId: conversationId, text: '', role: model)
+    };
+    yield messageMap.values.toList();
+
+    await for (var chunk in responseStream) {
+      final msg = jsonDecode(chunk);
+      messageMap[msg['name']]!.text+=msg['msg'];
+      yield messageMap.values.toList();
+    }
+  }
+
   Future<bool> selectMessages(
     String conversationId,
     String model,
