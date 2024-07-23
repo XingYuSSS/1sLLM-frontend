@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:ones_llm/configs/init.dart';
@@ -15,8 +14,6 @@ import 'package:ones_llm/services/api.dart';
 import 'package:ones_llm/services/local.dart';
 
 void main() async {
-  await GetStorage.init();
-  WidgetsFlutterBinding.ensureInitialized();
   await initAll();
   Get.put(ApiService());
   Get.put(LocalService());
