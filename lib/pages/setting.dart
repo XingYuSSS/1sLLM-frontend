@@ -48,6 +48,12 @@ class SettingPage extends GetResponsiveView {
                       'updateKey'.tr,
                     )),
                 const Divider(),
+                SwitchListTile(
+                  title: const Text('使用流式传输'),
+                  value: controller.useStream, 
+                  onChanged: controller.setUseStream,
+                ),
+                const Divider(),
                 ListTile(
                   dense: true,
                   title: Text(
@@ -58,7 +64,7 @@ class SettingPage extends GetResponsiveView {
                 RadioListTile(
                   title: Text('followSystem'.tr),
                   value: ThemeMode.system,
-                  groupValue: controller.themeMode.value,
+                  groupValue: controller.themeMode,
                   onChanged: (value) {
                     controller.setThemeMode(ThemeMode.system);
                   },
@@ -66,7 +72,7 @@ class SettingPage extends GetResponsiveView {
                 RadioListTile(
                   title: Text('darkMode'.tr),
                   value: ThemeMode.dark,
-                  groupValue: controller.themeMode.value,
+                  groupValue: controller.themeMode,
                   onChanged: (value) {
                     controller.setThemeMode(ThemeMode.dark);
                   },
@@ -74,7 +80,7 @@ class SettingPage extends GetResponsiveView {
                 RadioListTile(
                   title: Text('whiteMode'.tr),
                   value: ThemeMode.light,
-                  groupValue: controller.themeMode.value,
+                  groupValue: controller.themeMode,
                   onChanged: (value) {
                     controller.setThemeMode(ThemeMode.light);
                   },

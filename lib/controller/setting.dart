@@ -15,20 +15,18 @@ class SettingController extends GetxController {
       element: TextEditingController()
   };
   
-  final themeMode = ThemeMode.system.obs;
+  var themeMode = ThemeMode.system;
   var localeText = 'zh';
 
-  final useStream = true.obs;
-  final useWebSearch = false.obs;
+  var useStream = false;
+  var useWebSearch = false;
 
-  final version = "1.0.0".obs;
+  var version = "1.0.0";
 
   var isLogin = false;
 
   final ApiService api = Get.find();
   final LocalService local = Get.find();
-
-  static SettingController get to => Get.find();
 
   @override
   void onInit() async {
@@ -36,7 +34,8 @@ class SettingController extends GetxController {
     fillApiKeyToControllers(keyControllers);
     isLogin = local.isLogin;
     localeText = local.local.toString();
-    themeMode.value = local.theme;
+    themeMode = local.theme;
+    useStream = local.useStream;
     await initAppVersion();
     super.onInit();
     update();
@@ -44,12 +43,12 @@ class SettingController extends GetxController {
 
   initAppVersion() async {
     final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    version.value = packageInfo.version;
+    version = packageInfo.version;
   }
 
   void setThemeMode(ThemeMode model) async {
     Get.changeThemeMode(model);
-    themeMode.value = model;
+    themeMode = model;
     local.theme = model;
     update();
   }
@@ -57,6 +56,12 @@ class SettingController extends GetxController {
   void setLocale(Locale lol) {
     local.local = lol;
     localeText = lol.languageCode;
+    update();
+  }
+
+  void setUseStream(bool use){
+    local.useStream = use;
+    useStream = use;
     update();
   }
 
