@@ -18,8 +18,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Move all init statement in `main` to `init` file
 - Move the order of fields in `local`
+- Move operates other than `GetStorage` out of `local`
 - Set useless `obs` variable to `var` in `setting controller`
 - Update README
+
+### Fixed 
+
+- Fix the `locale` and `thememode` field back to default after restart
 
 ## [0.1.0] - 2024-07-22
 

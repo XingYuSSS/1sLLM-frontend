@@ -21,7 +21,6 @@ class LocalService extends GetxService {
 
   Locale get local => _local;
   set local(Locale local) {
-    Get.updateLocale(local);
     _local = local;
     _box.write('locale', local.languageCode);
   }

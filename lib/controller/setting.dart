@@ -54,6 +54,7 @@ class SettingController extends GetxController {
   }
 
   void setLocale(Locale lol) {
+    Get.updateLocale(lol);
     local.local = lol;
     localeText = lol.languageCode;
     update();

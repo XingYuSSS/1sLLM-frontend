@@ -28,6 +28,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final LocalService local = Get.find();
     return GetMaterialApp(
       initialRoute: '/',
       getPages: routes,
@@ -35,8 +36,8 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/', page: () => MyHomePage()),
       theme: FlexThemeData.light(scheme: FlexScheme.brandBlue),
       darkTheme: FlexThemeData.dark(scheme: FlexScheme.brandBlue),
-      themeMode: ThemeMode.system,
-      locale: const Locale('zh'),
+      themeMode: local.theme,
+      locale: local.local,
       translations: OnesLLMTranslations(),
       builder: EasyLoading.init(),
       debugShowCheckedModeBanner: false,
