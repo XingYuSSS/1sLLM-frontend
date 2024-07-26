@@ -14,7 +14,7 @@ class SettingController extends GetxController {
     for (final element in Get.find<ModelController>().modelProviderMap.keys)
       element: TextEditingController()
   };
-  
+
   var themeMode = ThemeMode.system;
   var localeText = 'zh';
 
@@ -60,7 +60,7 @@ class SettingController extends GetxController {
     update();
   }
 
-  void setUseStream(bool use){
+  void setUseStream(bool use) {
     local.useStream = use;
     useStream = use;
     update();
@@ -76,12 +76,20 @@ class SettingController extends GetxController {
 
   setApiKeyFromControllers(
       Map<String, TextEditingController> controllerMap) async {
-    for (final ctrl in controllerMap.entries) {
-      api.setApiKey(ctrl.key, ctrl.value.text);
-    }
+    EasyLoading.show(
+        status: 'updating'.tr,
+        dismissOnTap: false,
+        maskType: EasyLoadingMaskType.black);
+    final callList = [
+      for (final ctrl in controllerMap.entries)
+        api.setApiKey(ctrl.key, ctrl.value.text),
+    ];
+    await Future.wait(callList);
+    EasyLoading.dismiss();
   }
 
   void logout() async {
+    EasyLoading.show(status: 'logingOut'.tr);
     final res = await api.logout();
     switch (res) {
       case LoginResponse.success:

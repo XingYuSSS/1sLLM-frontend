@@ -61,6 +61,7 @@ class ConversationController extends GetxController {
   }
 
   void logout() async {
+    EasyLoading.show(status: 'logingOut'.tr);
     final res = await api.logout();
     switch (res) {
       case LoginResponse.success:

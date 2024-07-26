@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add useStream field in `local`
 - Add useStream option in `setting` page
 - Add fallback locale
+- Add loading animation of register and update
 
 ### Changed 
 
@@ -23,10 +24,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Set useless `obs` variable to `var` in `setting controller`
 - Update `README`
 - Password will hide in `login`
+- change "sign up" to "register"
 
 ### Fixed 
 
 - Fix the `locale` and `thememode` field back to default after restart
+- Fix backing to homepage is available while updating apikey
 
 ### Removed
 

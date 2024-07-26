@@ -22,7 +22,7 @@ class LoginController extends GetxController {
   void register() async {
     final username = userController.text.trim();
     final password = pdController.text.trim();
-    EasyLoading.show(status: 'signingUp'.tr);
+    EasyLoading.show(status: 'registering'.tr);
 
     if (pd2Controller.text.trim() != password) {
       // failmessage = "notSame";
