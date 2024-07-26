@@ -84,7 +84,7 @@ class ModelController extends GetxController {
     update();
   }
 
-  Map<String, List<String>> selected() {
+  Map<String, List<String>> getSelectedMap() {
     if(oneModelMode.isTrue) return {oneProvider: [oneModel]};
     final selectedMap = {
       for (final provider in modelProviderMap.values)

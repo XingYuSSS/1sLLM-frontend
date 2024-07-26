@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add streaming generate in `message controller` with simple animate
 - Add useStream field in `local`
 - Add useStream option in `setting` page
+- Add fallback locale
 
 ### Changed 
 

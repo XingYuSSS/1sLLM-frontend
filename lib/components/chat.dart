@@ -184,7 +184,7 @@ class ChatWindow extends StatelessWidget {
         conversationController.setCurrentConversationId(conversationId);
       }
       bool ret = await messageController.sendMessage(
-          conversationId, message, modelController.selected());
+          conversationId, message, modelController.getSelectedMap());
       if (ret) {
         _textController.text = '';
       }
@@ -201,7 +201,7 @@ class ChatWindow extends StatelessWidget {
     );
     conversationController.setCurrentConversationId(conversationId);
     bool ret = await messageController.sendMessage(
-        conversationId, prompt, modelController.selected());
+        conversationId, prompt, modelController.getSelectedMap());
     if (ret) {
       _textController.text = '';
     }

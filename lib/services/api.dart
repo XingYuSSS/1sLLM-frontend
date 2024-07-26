@@ -72,7 +72,7 @@ class ApiService extends GetxService {
       ProgressCallback? onReceiveProgress,
       bool decodeAsJson=true}) async {
     try {
-      final response = await _dio.get<String>(
+      final response = await _dio.get(
         path,
         queryParameters: queryParameters?.map((key, value) => MapEntry(
             key,
@@ -278,7 +278,7 @@ class ApiService extends GetxService {
     String text,
     Map<String, List<String>> providerModels,
   ) async* {
-    final response = await _get(
+    final response = await _get<ResponseBody>(
       '/chat/gen/stream',
       queryParameters: {
         'cid': conversationId,
@@ -297,9 +297,10 @@ class ApiService extends GetxService {
     };
     yield messageMap.values.toList();
 
-    await for (var chunk in responseStream) {
-      final msg = jsonDecode(chunk);
-      messageMap[msg['name']]!.text+=msg['msg'];
+    await for (final chunk in responseStream) {
+      print(utf8.decode(chunk));
+      final msg = jsonDecode(utf8.decode(chunk));
+      messageMap[msg['model']]!.text+=msg['message'];
       yield messageMap.values.toList();
     }
   }

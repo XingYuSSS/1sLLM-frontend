@@ -45,7 +45,7 @@ class MessageController extends GetxController {
     messageList.value = [...messages['msgList']!, sendedMessage];
 
     if(local.useStream) {
-      final stream = api.sendMessageStream(conversationId, text, selectProviderModels);
+      final stream = api.sendMessageStream(conversationId, text, selectProviderModels).asBroadcastStream();
 
       final first = await stream.first;
       if(first.length == 1){
@@ -55,17 +55,12 @@ class MessageController extends GetxController {
         selectingMessageList.value = first;
       }
 
-      List<Message> last = first;
-      await for (var newMessages in stream) {
-        last = newMessages;
+      await for (final newMessages in stream) {
         final msg = newMessages.map((e) {e.text+='_'; return e;}).toList();
         msg.length == 1
-          ? messageList[-1] = msg[0]
+          ? messageList.last = msg[0]
           : selectingMessageList.value = msg;
       }
-      last.length == 1
-        ? messageList[-1] = last[0]
-        : selectingMessageList.value = last;
     } else {
       EasyLoading.show(status: 'generatingResponse'.tr, dismissOnTap: true);
       final newMessages = await api.sendMessage(conversationId, text, selectProviderModels);
