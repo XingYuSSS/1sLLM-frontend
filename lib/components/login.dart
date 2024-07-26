@@ -42,6 +42,7 @@ class _LoginWindow extends StatelessWidget {
                     child: RadiusTextFormField(
                       controller: controller.pdController,
                       labelText: "password".tr,
+                      isPassword: true,
                     ),
                   ),
                   ...controller.statu == LoginStatu.register
@@ -52,6 +53,7 @@ class _LoginWindow extends StatelessWidget {
                             child: RadiusTextFormField(
                               controller: controller.pd2Controller,
                               labelText: "password2".tr,
+                              isPassword: true,
                             ),
                           )
                         ]

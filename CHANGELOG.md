@@ -21,11 +21,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Move the order of fields in `local`
 - Move operates other than `GetStorage` out of `local`
 - Set useless `obs` variable to `var` in `setting controller`
-- Update README
+- Update `README`
+- Password will hide in `login`
 
 ### Fixed 
 
 - Fix the `locale` and `thememode` field back to default after restart
+
+### Removed
+
+- remove useless widget
 
 ## [0.1.0] - 2024-07-22
 

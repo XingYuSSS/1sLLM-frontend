@@ -11,6 +11,7 @@ class RadiusTextFormField extends StatelessWidget {
     this.borderRadius=50,
     this.fillColor,
     this.padding,
+    this.isPassword=false
   });
 
   final TextEditingController controller;
@@ -20,12 +21,14 @@ class RadiusTextFormField extends StatelessWidget {
   final double borderRadius;
   final Color? fillColor;
   final EdgeInsetsGeometry? padding;
+  final bool isPassword;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: padding ?? const EdgeInsets.symmetric(vertical: 5, horizontal: 3),
       child: TextFormField(
+        obscureText: isPassword,
         style: inputStyle ?? const TextStyle(fontSize: 16),
         controller: controller,
         decoration: InputDecoration(
