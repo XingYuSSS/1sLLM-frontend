@@ -127,7 +127,7 @@ class SelectCardState extends State<SelectCard> {
                                 // color: Theme.of(context).colorScheme.surfaceVariant.withAlpha(100),
                                 elevation: 0,
                                 child: Markdown(
-                                    text: widget.selectList[index].text)),
+                                    text: widget.selectList[index].text+(widget.selectList[index].sending?'_':''))),
                           ),
                         ],
                       ),

@@ -44,22 +44,17 @@ class MessageController extends GetxController {
     final sendedMessage = Message(conversationId: conversationId, text: text, role: local.userName);
     messageList.value = [...messages['msgList']!, sendedMessage];
 
+    var singleFlag = false;
     if(local.useStream) {
       final stream = api.sendMessageStream(conversationId, text, selectProviderModels).asBroadcastStream();
-
-      final first = await stream.first;
-      if(first.length == 1){
-        messageList.add(first[0]);
-        selecting.value = false;
-      } else {
-        selectingMessageList.value = first;
-      }
-
       await for (final newMessages in stream) {
-        final msg = newMessages.map((e) {e.text+='_'; return e;}).toList();
-        msg.length == 1
-          ? messageList.last = msg[0]
-          : selectingMessageList.value = msg;
+        if (!singleFlag && newMessages.length == 1) {
+          messageList.add(newMessages[0]);
+          singleFlag = true;
+        }
+        newMessages.length == 1
+          ? messageList.last = newMessages[0]
+          : selectingMessageList.value = newMessages;
       }
     } else {
       EasyLoading.show(status: 'generatingResponse'.tr, dismissOnTap: true);
@@ -72,6 +67,7 @@ class MessageController extends GetxController {
         selectingMessageList.value = newMessages;
       }
     }
+    selecting.value = !singleFlag;
     sending.value = false;
     return true;
   }

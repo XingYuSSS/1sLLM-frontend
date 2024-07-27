@@ -10,9 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add streaming generate in `api` 
-- Add streaming generate in `message controller` with simple animate
-- Add useStream field in `local`
-- Add useStream option in `setting` page
+- Add streaming generate in `message controller`
+- Add simple streaming generate animation in `message card` and `select card`
+- Add `sending` field in `Message` class
+- Add `useStream` field in `local`
+- Add `useStream` option in `setting` page
 - Add fallback locale
 - Add loading animation of register and update
 

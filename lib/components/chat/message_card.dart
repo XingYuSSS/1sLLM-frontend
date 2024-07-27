@@ -100,7 +100,7 @@ class MessageCard extends StatelessWidget {
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
-                        child: Markdown(text: message.text),
+                        child: Markdown(text: message.text+(message.sending?'_':'')),
                       ),
                     ),
                   ],

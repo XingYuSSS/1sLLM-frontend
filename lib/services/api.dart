@@ -1,9 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:dio/browser.dart'
     if (dart.library.io) 'package:ones_llm/crossPlatform/fakeDioBrowser.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show Uint8List, kIsWeb;
 import 'package:get/get.dart' hide Response;
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:cookie_jar/cookie_jar.dart';
@@ -30,13 +31,15 @@ class Message {
   String text;
   String? modelName;
   bool error;
+  bool sending;
   Message(
       {this.id,
       required this.conversationId,
       required this.text,
       required this.role,
       this.modelName,
-      this.error = false});
+      this.error = false,
+      this.sending = false});
       
 }
 
@@ -46,6 +49,12 @@ enum RegisterResponse { success, existName, unknown }
 
 class ApiService extends GetxService {
   late Dio _dio;
+  final StreamTransformer<Uint8List, List<int>> unit8Transformer =
+      StreamTransformer.fromHandlers(
+    handleData: (data, sink) {
+      sink.add(List<int>.from(data));
+    },
+  );
 
   @override
   void onInit() async {
@@ -278,6 +287,13 @@ class ApiService extends GetxService {
     String text,
     Map<String, List<String>> providerModels,
   ) async* {
+    final models = providerModels.values.expand((element) => element);    
+    Map<String, Message> messageMap = {
+      for (String model in models)
+      model: Message(conversationId: conversationId, text: '', role: model, sending: true)
+    };
+    yield messageMap.values.toList();
+
     final response = await _get<ResponseBody>(
       '/chat/gen/stream',
       queryParameters: {
@@ -288,21 +304,23 @@ class ApiService extends GetxService {
       options: Options(responseType: ResponseType.stream),
       decodeAsJson: false
     );
-    final Stream responseStream = response.stream;
-
-    final models = providerModels.values.expand((element) => element);    
-    Map<String, Message> messageMap = {
-      for (String model in models)
-      model: Message(conversationId: conversationId, text: '', role: model)
-    };
-    yield messageMap.values.toList();
+    final Stream responseStream = response.stream
+      .transform(unit8Transformer)
+      .transform(const Utf8Decoder());
+    print(response);
 
     await for (final chunk in responseStream) {
-      print(utf8.decode(chunk));
-      final msg = jsonDecode(utf8.decode(chunk));
-      messageMap[msg['model']]!.text+=msg['message'];
+      print('object');
+      print(chunk);
+      for (final line in chunk.split('\n')) {
+        if (line.isEmpty) continue;
+        final msg = jsonDecode(line);
+        messageMap[msg['model']]!.text+=msg['message'];
+      }
       yield messageMap.values.toList();
     }
+    messageMap.forEach((key, value) {value.sending = false;});
+    yield messageMap.values.toList();
   }
 
   Future<bool> selectMessages(

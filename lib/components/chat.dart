@@ -26,9 +26,9 @@ class ChatWindow extends StatelessWidget {
       constraints: const BoxConstraints(maxWidth: double.infinity),
       padding: EdgeInsets.fromLTRB(lrpadding, 16, lrpadding, 16),
       decoration: BoxDecoration(
-        borderRadius: const BorderRadius.only(topRight: Radius.circular(5), bottomRight: Radius.circular(5)), 
-        color: Get.theme.colorScheme.background.darken(2)
-      ),
+          borderRadius: const BorderRadius.only(
+              topRight: Radius.circular(5), bottomRight: Radius.circular(5)),
+          color: Get.theme.colorScheme.background.darken(2)),
       child: Column(
         children: [
           Expanded(
@@ -41,14 +41,13 @@ class ChatWindow extends StatelessWidget {
                   return ListView.builder(
                     controller: _scrollController,
                     itemCount: controller.messageList.length +
-                        (controller.selectingMessageList.isNotEmpty
-                            ? 1
-                            : 0),
+                        (controller.selectingMessageList.isNotEmpty ? 1 : 0),
                     itemBuilder: (context, index) {
                       final msgLen = controller.messageList.length;
                       if (index < msgLen) {
                         return MessageCard(
-                            message: controller.messageList[index]);
+                          message: controller.messageList[index],
+                        );
                       } else {
                         return SelectCard(
                           selectList: controller.selectingMessageList,
@@ -81,9 +80,7 @@ class ChatWindow extends StatelessWidget {
                   () => Tooltip(
                     message: 'selectModel'.tr,
                     child: ElevatedButton(
-                      onPressed: Get.find<MessageController>()
-                              .selecting
-                              .isTrue
+                      onPressed: Get.find<MessageController>().selecting.isTrue
                           ? null
                           : () {
                               Get.find<ModelController>()
@@ -105,8 +102,7 @@ class ChatWindow extends StatelessWidget {
               Expanded(
                 child: Obx(
                   () => TextFormField(
-                    enabled:
-                        Get.find<MessageController>().selecting.isFalse,
+                    enabled: Get.find<MessageController>().selecting.isFalse,
                     style: const TextStyle(fontSize: 16),
                     controller: _textController,
                     keyboardType: TextInputType.multiline,
@@ -140,12 +136,11 @@ class ChatWindow extends StatelessWidget {
                   () => Tooltip(
                     message: 'send'.tr,
                     child: ElevatedButton(
-                      onPressed:
-                          Get.find<MessageController>().selecting.isTrue
-                              ? null
-                              : () {
-                                  _sendMessage();
-                                },
+                      onPressed: Get.find<MessageController>().selecting.isTrue
+                          ? null
+                          : () {
+                              _sendMessage();
+                            },
                       style: ElevatedButton.styleFrom(
                         shape: const RoundedRectangleBorder(
                             borderRadius:
