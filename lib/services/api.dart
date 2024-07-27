@@ -8,6 +8,9 @@ import 'package:flutter/foundation.dart' show Uint8List, kIsWeb;
 import 'package:get/get.dart' hide Response;
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:cookie_jar/cookie_jar.dart';
+import 'package:fetch_client/fetch_client.dart'
+    if (dart.library.io) 'package:ones_llm/crossPlatform/fakeFetchClient.dart';
+import 'package:http/http.dart';
 
 import 'package:ones_llm/services/api/error.dart';
 import 'package:ones_llm/configs/variables.dart';
@@ -49,16 +52,24 @@ enum RegisterResponse { success, existName, unknown }
 
 class ApiService extends GetxService {
   late Dio _dio;
-  final StreamTransformer<Uint8List, List<int>> unit8Transformer =
-      StreamTransformer.fromHandlers(
-    handleData: (data, sink) {
-      sink.add(List<int>.from(data));
-    },
-  );
-
+  late StreamTransformer<Uint8List, List<int>> unit8Transformer;
+  late FetchClient fetchClient;
+  
   @override
   void onInit() async {
     super.onInit();
+    unit8Transformer = StreamTransformer.fromHandlers(
+    handleData: (data, sink) {
+      sink.add(List<int>.from(data));
+    },
+    );
+
+    fetchClient = FetchClient(
+      mode: RequestMode.cors,
+      credentials: RequestCredentials.cors,
+      streamRequests: true
+    );
+
     _dio = Dio();
     if (kIsWeb) {
       var adapter = BrowserHttpClientAdapter(withCredentials: true);
@@ -97,7 +108,26 @@ class ApiService extends GetxService {
     }
   }
 
-  Future<Response<T>> _post<T>(String path,
+  Future<FetchResponse> _getWeb(String path,
+      {Map<String, dynamic>? queryParameters,}) async {
+    try {
+      final uri = Uri.http(
+          apiBaseUrl.replaceFirst(RegExp('https?://'), ''),
+          '/chat/gen/stream',
+          queryParameters = queryParameters?.map((key, value) => MapEntry(
+              key,
+              base64Encode(
+                  utf8.encode(value is String ? value : jsonEncode(value))))));
+      final response = await fetchClient.send(Request('GET', uri));
+      return response;
+    } on Exception catch (e) {
+      e.printError();
+      e.printInfo();
+      rethrow;
+    }
+  }
+
+  Future<T> _post<T>(String path,
       {dynamic data,
       Map<String, dynamic>? queryParameters,
       Options? options,
@@ -115,7 +145,7 @@ class ApiService extends GetxService {
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,
       );
-      return response;
+      return response.data! as T;
     } on DioException catch (_) {
       rethrow;
     }
@@ -293,25 +323,35 @@ class ApiService extends GetxService {
       model: Message(conversationId: conversationId, text: '', role: model, sending: true)
     };
     yield messageMap.values.toList();
-
-    final response = await _get<ResponseBody>(
-      '/chat/gen/stream',
-      queryParameters: {
-        'cid': conversationId,
-        'p': text,
-        'provider_models': providerModels
-      },
-      options: Options(responseType: ResponseType.stream),
-      decodeAsJson: false
-    );
-    final Stream responseStream = response.stream
-      .transform(unit8Transformer)
-      .transform(const Utf8Decoder());
-    print(response);
+    final Stream responseStream;
+    if(kIsWeb){
+      final response = await _getWeb(
+        '/chat/gen/stream',
+        queryParameters: {
+          'cid': conversationId,
+          'p': text,
+          'provider_models': providerModels
+        },
+      );
+      responseStream = response.stream
+        .transform(const Utf8Decoder());
+    } else {
+      final response = await _get<ResponseBody>(
+        '/chat/gen/stream',
+        queryParameters: {
+          'cid': conversationId,
+          'p': text,
+          'provider_models': providerModels
+        },
+        options: Options(responseType: ResponseType.stream),
+        decodeAsJson: false
+      );
+      responseStream = response.stream
+        .transform(unit8Transformer)
+        .transform(const Utf8Decoder());
+    }
 
     await for (final chunk in responseStream) {
-      print('object');
-      print(chunk);
       for (final line in chunk.split('\n')) {
         if (line.isEmpty) continue;
         final msg = jsonDecode(line);

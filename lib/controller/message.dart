@@ -56,6 +56,7 @@ class MessageController extends GetxController {
           ? messageList.last = newMessages[0]
           : selectingMessageList.value = newMessages;
       }
+      selecting.value = !singleFlag;
     } else {
       EasyLoading.show(status: 'generatingResponse'.tr, dismissOnTap: true);
       final newMessages = await api.sendMessage(conversationId, text, selectProviderModels);
@@ -67,7 +68,6 @@ class MessageController extends GetxController {
         selectingMessageList.value = newMessages;
       }
     }
-    selecting.value = !singleFlag;
     sending.value = false;
     return true;
   }
