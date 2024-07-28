@@ -78,6 +78,6 @@ class LocalService extends GetxService {
   }
 
   initUseStream() async {
-    _useStream = _box.read('useStream') ?? false;
+    _useStream = _box.read('useStream') ?? true;
   }
 }

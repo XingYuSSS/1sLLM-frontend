@@ -46,7 +46,7 @@ class MessageController extends GetxController {
 
     var singleFlag = false;
     if(local.useStream) {
-      final stream = api.sendMessageStream(conversationId, text, selectProviderModels).asBroadcastStream();
+      final stream = api.sendMessageStream(conversationId, text, selectProviderModels);
       await for (final newMessages in stream) {
         if (!singleFlag && newMessages.length == 1) {
           messageList.add(newMessages[0]);

@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0]
+
 ### Added
 
 - Add streaming generate in `api` 
@@ -45,5 +47,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add README and CHANGELOG
 - Add LICENSE
 
-[unreleased]: https://github.com/XingYuSSS/1sLLM-frontend/compare/v0.1.0...HEAD
+[unreleased]: https://github.com/XingYuSSS/1sLLM-frontend/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/XingYuSSS/1sLLM-frontend/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/XingYuSSS/1sLLM-frontend/tree/v0.1.0

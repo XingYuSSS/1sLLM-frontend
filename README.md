@@ -2,7 +2,7 @@
 
 <p style="text-align: center;">
     <a href="https://github.com/XingYuSSS"><img src="https://img.shields.io/badge/Github-XingYuSSS-blue?logo=github" /></a>
-    <a href="https://github.com/XingYuSSS/1sLLM-frontend/blob/v0.1.0/CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.1.0-brown.svg" alt="version"></a>
+    <a href="https://github.com/XingYuSSS/1sLLM-frontend/blob/v0.2.0/CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.2.0-brown.svg" alt="version"></a>
     <a href="https://github.com/XingYuSSS/1sLLM-frontend"><img src="https://img.shields.io/badge/link-frontend-green?logo=github" /></a>
     <a href="https://github.com/XingYuSSS/1sLLM-backend"><img src="https://img.shields.io/badge/link-backend-purple?logo=github" /></a>
     <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT License"></a>
@@ -56,9 +56,9 @@
 - [x] 多用户与对话历史存储
 - [x] apikey 管理
 - [x] 欢迎页面
+- [x] 流式传输
 - [ ] 自定义 prompt
 - [ ] 导出会话
-- [ ] 流式传输
 
 ## 运行方式
 
