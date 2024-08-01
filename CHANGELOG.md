@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - apikey textField in `setting page` will not show in single model mode
 - apikey textcontroller in `setting controller` will not init in single model mode
 - model select button in `chat` will not show in single model mode
+- Update `README`
 
 ### Removed
 
