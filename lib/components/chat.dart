@@ -11,6 +11,7 @@ import 'package:ones_llm/controller/model.dart';
 import 'package:ones_llm/components/chat/message_card.dart';
 import 'package:ones_llm/controller/conversation.dart';
 import 'package:ones_llm/controller/message.dart';
+import 'package:ones_llm/configs/variables.dart';
 
 class ChatWindow extends StatelessWidget {
   final _textController = TextEditingController();
@@ -73,32 +74,36 @@ class ChatWindow extends StatelessWidget {
           const SizedBox(height: 16),
           Row(
             children: [
-              Container(
-                height: 48,
-                padding: const EdgeInsets.symmetric(horizontal: 2),
-                child: Obx(
-                  () => Tooltip(
-                    message: 'selectModel'.tr,
-                    child: ElevatedButton(
-                      onPressed: Get.find<MessageController>().selecting.isTrue
-                          ? null
-                          : () {
-                              Get.find<ModelController>()
-                                  .getAvailableProviderModels();
-                              Get.dialog(
-                                  const Dialog(child: ModelSelectWindow()));
-                            },
-                      style: ElevatedButton.styleFrom(
-                        shape: const RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(30))),
-                        padding: EdgeInsets.zero,
+              if (!singleModelMode) ...[
+                Container(
+                  height: 48,
+                  padding: const EdgeInsets.symmetric(horizontal: 2),
+                  child: Obx(
+                    () => Tooltip(
+                      message: 'selectModel'.tr,
+                      child: ElevatedButton(
+                        onPressed: Get.find<MessageController>()
+                                .selecting
+                                .isTrue
+                            ? null
+                            : () {
+                                Get.find<ModelController>()
+                                    .getAvailableProviderModels();
+                                Get.dialog(
+                                    const Dialog(child: ModelSelectWindow()));
+                              },
+                        style: ElevatedButton.styleFrom(
+                          shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(30))),
+                          padding: EdgeInsets.zero,
+                        ),
+                        child: const Icon(FontAwesomeIcons.bars),
                       ),
-                      child: const Icon(FontAwesomeIcons.bars),
                     ),
                   ),
                 ),
-              ),
+              ],
               Expanded(
                 child: Obx(
                   () => TextFormField(

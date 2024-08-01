@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import 'package:ones_llm/services/api.dart';
+import 'package:ones_llm/configs/variables.dart';
 
 class Model {
   bool _selected = false;
@@ -32,9 +33,6 @@ class ModelProvider {
 
 class ModelController extends GetxController {
   final modelProviderMap = <String, ModelProvider>{}.obs;
-  final oneModelMode = false.obs;
-  String oneModel = '';
-  String oneProvider = '';
 
   final ApiService api = Get.find();
 
@@ -85,7 +83,7 @@ class ModelController extends GetxController {
   }
 
   Map<String, List<String>> getSelectedMap() {
-    if(oneModelMode.isTrue) return {oneProvider: [oneModel]};
+    if(singleModelMode) return {singleProviderName: [singleModelName]};
     final selectedMap = {
       for (final provider in modelProviderMap.values)
       provider.name: provider.getSelectedModelName()

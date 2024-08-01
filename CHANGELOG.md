@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add single model mode
+- Add single model mode config in `.env` and `variables`
+
+### Changed 
+
+- apikey textField in `setting page` will not show in single model mode
+- apikey textcontroller in `setting controller` will not init in single model mode
+- model select button in `chat` will not show in single model mode
+
+### Removed
+
+- remove `print` statements
+
 ## [0.2.0]
 
 ### Added

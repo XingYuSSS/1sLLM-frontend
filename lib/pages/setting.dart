@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
 import 'package:ones_llm/components/common/text_form.dart';
 import 'package:ones_llm/controller/setting.dart';
-import 'package:get/get.dart';
+import 'package:ones_llm/configs/variables.dart';
 
 class SettingPage extends GetResponsiveView {
   SettingPage({super.key});
-  // final modelController = Get.find<ModelController>();
-  // final controller = Get.find<SettingController>();
 
   @override
   Widget? builder() {
@@ -26,31 +26,33 @@ class SettingPage extends GetResponsiveView {
             return ListView(
               padding: EdgeInsets.fromLTRB(lrpadding, 32, lrpadding, 16),
               children: [
-                const Divider(),
-                const ListTile(
-                  dense: true,
-                  title: Text(
-                    'Api Key',
-                    textScaler: TextScaler.linear(1.5),
+                if (!singleModelMode) ...[
+                  const Divider(),
+                  const ListTile(
+                    dense: true,
+                    title: Text(
+                      'Api Key',
+                      textScaler: TextScaler.linear(1.5),
+                    ),
                   ),
-                ),
-                ...[
-                  for (final apiKey in controller.keyControllers.entries)
-                    RadiusTextFormField(
-                      controller: apiKey.value,
-                      labelText: apiKey.key,
-                    )
-                ],
-                ElevatedButton(
+                  ...[
+                    for (final apiKey in controller.keyControllers.entries)
+                      RadiusTextFormField(
+                        controller: apiKey.value,
+                        labelText: apiKey.key,
+                      )
+                  ],
+                  ElevatedButton(
                     onPressed: () => controller
                         .setApiKeyFromControllers(controller.keyControllers),
                     child: Text(
                       'updateKey'.tr,
                     )),
+                ],
                 const Divider(),
                 SwitchListTile(
                   title: const Text('使用流式传输'),
-                  value: controller.useStream, 
+                  value: controller.useStream,
                   onChanged: controller.setUseStream,
                 ),
                 const Divider(),

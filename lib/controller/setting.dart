@@ -8,12 +8,10 @@ import 'package:ones_llm/controller/model.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:ones_llm/services/api.dart';
 import 'package:ones_llm/services/local.dart';
+import 'package:ones_llm/configs/variables.dart';
 
 class SettingController extends GetxController {
-  final keyControllers = {
-    for (final element in Get.find<ModelController>().modelProviderMap.keys)
-      element: TextEditingController()
-  };
+  late Map<String, TextEditingController> keyControllers = {};
 
   var themeMode = ThemeMode.system;
   var localeText = 'zh';
@@ -30,8 +28,14 @@ class SettingController extends GetxController {
 
   @override
   void onInit() async {
-    // await getThemeModeFromPreferences();
-    fillApiKeyToControllers(keyControllers);
+    if (!singleModelMode) {
+      keyControllers = {
+        for (final element in Get.find<ModelController>().modelProviderMap.keys)
+          element: TextEditingController()
+      };
+      fillApiKeyToControllers(keyControllers);
+    }
+
     isLogin = local.isLogin;
     localeText = local.local.toString();
     themeMode = local.theme;

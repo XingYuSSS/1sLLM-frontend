@@ -8,14 +8,23 @@ late final Directory appDocDir;
 
 late final String apiBaseUrl;
 
+late final bool singleModelMode;
+late final String singleModelName;
+late final String singleProviderName;
+
 Future initVar() async {
   await dotenv.load(fileName: ".env");
   apiBaseUrl = dotenv.env['apiBaseUrl']!;
+
+  singleModelMode = dotenv.env['singleModelMode']?.toLowerCase() == 'true';
+  if (singleModelMode) {
+    singleModelName = dotenv.env['singleModelName']!;
+    singleProviderName = dotenv.env['singleProviderName']!;
+  }
+  
   if(!kIsWeb){
     appCacheDir = await getApplicationCacheDirectory();
     appDocDir = await getApplicationDocumentsDirectory();
-    print(appCacheDir);
-    print(appDocDir);
   } else {
     
   }
